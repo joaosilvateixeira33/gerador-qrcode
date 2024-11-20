@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de QR Code</title>
+    <script src="https://unpkg.com/vue@2"></script>
+    <script src="https://unpkg.com/qrious"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <qr-code-generator></qr-code-generator>
+    </div>
+
+    <script>
+        Vue.component('qr-code-generator', {
+            data() {
+                return {
+                    tipoQRCode: 'telefone', 
+                    entrada: '',            
+                    qr: null,              
+                    isValid: true           
+                };
+            },
+            methods: {
+                validarTelefone(entrada) {
+                    return entrada.length === 10 || entrada.length === 11 && /^[0-9]+$/.test(entrada);
+                },
+                gerarQRCode() {
+                    if (!this.qr) {
+                        this.qr = new QRious({
+                            element: this.$refs.qrCanvas, 
+                            size: 250,                    
+                        });
+                    }
+
+                    if (this.tipoQRCode === 'telefone') {
+                        if (!this.validarTelefone(this.entrada)) {
+                            this.isValid = false;
+                            return;
+                        } else {
+                            this.isValid = true;
+                        }
+                        this.qr.value = `tel:${this.entrada}`;
+                    } else {
+                        this.isValid = true;
+                        this.qr.value = this.entrada;
+                    }
+                },
+                limpar() {
+                    this.entrada = '';
+                    this.qr.value = '';
+                    this.isValid = true;
+
+                    if (this.$refs.qrCanvas) {
+                        const ctx = this.$refs.qrCanvas.getContext('2d');
+                        ctx.clearRect(0, 0, this.$refs.qrCanvas.width, this.$refs.qrCanvas.height);
+                    }
+                }
+            },
+
+            template: `
+                <div class="container">
+                    <h1>Gerador de QR Code</h1>
+                    
+                    <select v-model="tipoQRCode">
+                        <option value="telefone">Número de Telefone</option>
+                        <option value="texto">Texto</option>
+                    </select>
+                        
+                    <input 
+                        v-model="entrada" 
+                        placeholder="Digite o valor" 
+                        :class="{'invalid': !isValid}"
+                    />
+                        
+                    <p v-if="!isValid" style="color: red;">Por favor, insira um número de telefone válido.</p>
+                    
+                    <div>
+                        <button @click="gerarQRCode" :disabled="!entrada">Gerar QR Code</button>
+                        <button @click="limpar">Limpar</button>    
+                    </div>
+                    
+                    <canvas ref="qrCanvas"></canvas>
+                </div>
+            `
+        });
+
+        new Vue({
+            el: '#app',
+        });
+    </script>
+</body>
+</html>

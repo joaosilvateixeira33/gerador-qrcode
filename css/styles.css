@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root{
+    --font-general: "Roboto", sans-serif;
+    --grey-color-1: #f9f9f9;
+    --grey-color-2: #ccc;
+    --gradient: linear-gradient(to right, rgb(19, 106, 138), rgb(38, 120, 113));
+    --brand-color-1: #4CAF50;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: var(--font-general);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: var(--gradient);
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: var(--grey-color-1);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+select{
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+input{
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+button {
+    margin: 10px;
+    padding: 10px;
+    background-color: var(--brand-color-1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: var(--grey-color-2);
+    cursor: not-allowed;
+}
+
+.invalid {
+    border: 1px solid red;
+}
